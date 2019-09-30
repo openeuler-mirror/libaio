@@ -1,0 +1,11 @@
+--- libaio-0.3.111_old/Makefile	2019-02-14 04:09:48.697926020 -0500
++++ libaio-0.3.111/Makefile	2019-02-14 04:10:10.715926272 -0500
+@@ -14,7 +14,7 @@
+ 	@$(MAKE) -C src
+ 
+ install:
+-	@$(MAKE) -C src install prefix=$(prefix) includedir=$(includedir) libdir=$(libdir)
++	@$(MAKE) -C src install prefix=$(DESTDIR)$(prefix) includedir=$(includedir) libdir=$(libdir)
+ 
+ check:
+ 	@$(MAKE) -C harness check

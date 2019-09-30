@@ -1,0 +1,109 @@
+Name:           libaio
+Version:        0.3.111
+Release:        4
+Summary:        Linux-native asynchronous I/O access library
+License:        LGPLv2+
+URL:            https://pagure.io/libaio
+Source:         http://releases.pagure.org/libaio/libaio-0.3.111.tar.gz
+
+Patch0000:      0000-libaio-install-to-destdir-slash-usr.patch
+
+Patch9000:      9000-libaio-arm64-ilp32.patch
+%ifarch aarch64 aarch64_ilp32
+Patch9001:      9001-libaio-makefile-cflags.patch
+%endif
+
+Patch9002:      9002-destdir.patch
+Patch9003:      9003-libaio-fix-for-x32.patch
+
+BuildRequires:  gcc
+
+%description
+The Linux-native asynchronous I/O facility ("async I/O", or "aio") has a
+richer API and capability set than the simple POSIX async I/O facility.
+This library, libaio, provides the Linux-native API for async I/O.
+The POSIX async I/O facility requires this library in order to provide
+kernel-accelerated async I/O capabilities, as do applications which
+require the Linux-native async I/O API.
+
+%package  devel
+Summary:  Files for libaio development
+Requires: %{name}%{?_isa} = %{version}-%{release}
+
+%description devel
+Files for libaio development
+
+%prep
+%setup -q -a 0
+%patch0000 -p0 -b .install-to-destdir-slash-usr
+%patch0000 -p1 -b .install-to-destdir-slash-usr
+
+%patch9000 -p0 -b .arm64-ilp32
+%patch9000 -p1 -b .arm64-ilp32
+%ifarch aarch64 aarch64_ilp32
+%patch9001 -p0 -b .makefile-cflags
+%patch9001 -p1 -b .makefile-cflags
+%endif
+%patch9002 -p0 -b .makefile-destdir
+%patch9002 -p1 -b .makefile-destdir
+%patch9003 -p0 -b .fix-x32
+%patch9003 -p1 -b .fix-x32
+
+mv %{name}-%{version} setup-%{name}-%{version}
+
+%build
+make -C setup-%{name}-%{version} soname='libaio.so.1.0.0' libname='libaio.so.1.0.0'
+make
+
+%install
+pushd setup-%{name}-%{version}
+install -D -m 755 src/libaio.so.1.0.0 \
+  $RPM_BUILD_ROOT/%{_libdir}/libaio.so.1.0.0
+popd
+make destdir=$RPM_BUILD_ROOT prefix=/ libdir=/%{_lib} usrlibdir=%{_libdir} \
+        includedir=%{_includedir} install
+
+rm -rf %{buildroot}%{_usr}/%{_lib}/libaio.a
+
+%ldconfig_scriptlets
+
+%files
+%license COPYING
+%attr(0755,root,root) %{_libdir}/libaio.so.*
+
+%files devel
+%attr(0644,root,root) %{_includedir}/*
+%attr(0755,root,root) %{_libdir}/libaio.so
+
+%changelog
+* Wed Sep 4 2019 sunshihao<sunshihao@huawei.com> - 0.3.111-4
+- Type:enhancemnet
+- ID:NA
+- SUG:restart
+- DESCi:openEuler Debranding.
+
+* Wed Aug 21 2019 wubo <wubo40@huawei.com> - 0.3.111-3.h4
+- Type:enhancement
+- ID:NA
+- SUG:NA
+- DESC:change patch name
+
+* Tue Apr 2 2019 guyue <guyue7@huawei.com> 0.3.111-3.h3
+- Type:bugfix
+- ID:NA
+- SUG:NA
+- DESC:delete useless code
+
+* Thu Feb 14 2019 geruijun <geruijun@huawei.com> 0.3.111-3.h2
+- Type:bugfix
+- ID:NA
+- SUG:NA
+- DESC:add backport patches
+
+* Sat Jan 26 2019 wangxiao <wangxiao65@huawei.com> 0.3.111-h1
+- Type:enhancement
+- ID:NA
+- SUG:NA
+- DESC: support ilp32 for aarch64
+
+- Package Init
