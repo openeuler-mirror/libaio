@@ -1,6 +1,6 @@
 Name:           libaio
 Version:        0.3.111
-Release:        4
+Release:        5
 Summary:        Linux-native asynchronous I/O access library
 License:        LGPLv2+
 URL:            https://pagure.io/libaio
@@ -9,7 +9,7 @@ Source:         http://releases.pagure.org/libaio/libaio-0.3.111.tar.gz
 Patch0000:      0000-libaio-install-to-destdir-slash-usr.patch
 
 Patch9000:      9000-libaio-arm64-ilp32.patch
-%ifarch aarch64 aarch64_ilp32
+%ifarch aarch64 aarch64_ilp32 x86_64
 Patch9001:      9001-libaio-makefile-cflags.patch
 %endif
 
@@ -40,7 +40,7 @@ Files for libaio development
 
 %patch9000 -p0 -b .arm64-ilp32
 %patch9000 -p1 -b .arm64-ilp32
-%ifarch aarch64 aarch64_ilp32
+%ifarch aarch64 aarch64_ilp32 x86_64
 %patch9001 -p0 -b .makefile-cflags
 %patch9001 -p1 -b .makefile-cflags
 %endif
@@ -76,11 +76,17 @@ rm -rf %{buildroot}%{_usr}/%{_lib}/libaio.a
 %attr(0755,root,root) %{_libdir}/libaio.so
 
 %changelog
+* Tue Mar 17 2020 hy-euler <eulerstoragemt@huawei.com> - 0.3.111-5
+- Type:enhancemnet
+- ID:NA
+- SUG:restart
+- DESC:Add secure compilation options for x86_64.
+
 * Wed Sep 4 2019 sunshihao<sunshihao@huawei.com> - 0.3.111-4
 - Type:enhancemnet
 - ID:NA
 - SUG:restart
-- DESCi:openEuler Debranding.
+- DESC:openEuler Debranding.
 
 * Wed Aug 21 2019 wubo <wubo40@huawei.com> - 0.3.111-3.h4
 - Type:enhancement
