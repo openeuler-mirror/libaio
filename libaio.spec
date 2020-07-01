@@ -1,20 +1,18 @@
 Name:           libaio
 Version:        0.3.111
-Release:        5
+Release:        6
 Summary:        Linux-native asynchronous I/O access library
 License:        LGPLv2+
 URL:            https://pagure.io/libaio
 Source:         http://releases.pagure.org/libaio/libaio-0.3.111.tar.gz
 
 Patch0000:      0000-libaio-install-to-destdir-slash-usr.patch
-
-Patch9000:      9000-libaio-arm64-ilp32.patch
+Patch0001:      0001-libaio-arm64-ilp32.patch
 %ifarch aarch64 aarch64_ilp32 x86_64
-Patch9001:      9001-libaio-makefile-cflags.patch
+Patch0002:      0002-libaio-makefile-cflags.patch
 %endif
-
-Patch9002:      9002-destdir.patch
-Patch9003:      9003-libaio-fix-for-x32.patch
+Patch0003:      0003-destdir.patch
+Patch0004:      0004-libaio-fix-for-x32.patch
 
 BuildRequires:  gcc
 
@@ -76,6 +74,9 @@ rm -rf %{buildroot}%{_usr}/%{_lib}/libaio.a
 %attr(0755,root,root) %{_libdir}/libaio.so
 
 %changelog
+* Wed Jul 1 2020 Wu Bo <wubo009@163.com> - 0.3.111-6
+- rebuild package
+
 * Tue Mar 17 2020 hy-euler <eulerstoragemt@huawei.com> - 0.3.111-5
 - Type:enhancemnet
 - ID:NA
