@@ -1,20 +1,18 @@
 Name:           libaio
 Version:        0.3.111
-Release:        5
+Release:        6
 Summary:        Linux-native asynchronous I/O access library
 License:        LGPLv2+
 URL:            https://pagure.io/libaio
 Source:         http://releases.pagure.org/libaio/libaio-0.3.111.tar.gz
 
-Patch0000:      0000-libaio-install-to-destdir-slash-usr.patch
-
-Patch9000:      9000-libaio-arm64-ilp32.patch
+Patch0:         0000-libaio-install-to-destdir-slash-usr.patch
+Patch1:         0001-libaio-arm64-ilp32.patch
 %ifarch aarch64 aarch64_ilp32 x86_64
-Patch9001:      9001-libaio-makefile-cflags.patch
+Patch2:         0002-libaio-makefile-cflags.patch
 %endif
-
-Patch9002:      9002-destdir.patch
-Patch9003:      9003-libaio-fix-for-x32.patch
+Patch3:         0003-destdir.patch
+Patch4:         0004-libaio-fix-for-x32.patch
 
 BuildRequires:  gcc
 
@@ -35,19 +33,19 @@ Files for libaio development
 
 %prep
 %setup -q -a 0
-%patch0000 -p0 -b .install-to-destdir-slash-usr
-%patch0000 -p1 -b .install-to-destdir-slash-usr
+%patch0   -p0 -b .install-to-destdir-slash-usr
+%patch0   -p1 -b .install-to-destdir-slash-usr
 
-%patch9000 -p0 -b .arm64-ilp32
-%patch9000 -p1 -b .arm64-ilp32
+%patch1   -p0 -b .arm64-ilp32
+%patch1   -p1 -b .arm64-ilp32
 %ifarch aarch64 aarch64_ilp32 x86_64
-%patch9001 -p0 -b .makefile-cflags
-%patch9001 -p1 -b .makefile-cflags
+%patch2   -p0 -b .makefile-cflags
+%patch2   -p1 -b .makefile-cflags
 %endif
-%patch9002 -p0 -b .makefile-destdir
-%patch9002 -p1 -b .makefile-destdir
-%patch9003 -p0 -b .fix-x32
-%patch9003 -p1 -b .fix-x32
+%patch3   -p0 -b .makefile-destdir
+%patch3   -p1 -b .makefile-destdir
+%patch4   -p0 -b .fix-x32
+%patch4   -p1 -b .fix-x32
 
 mv %{name}-%{version} setup-%{name}-%{version}
 
@@ -76,6 +74,9 @@ rm -rf %{buildroot}%{_usr}/%{_lib}/libaio.a
 %attr(0755,root,root) %{_libdir}/libaio.so
 
 %changelog
+* Wed Jul 1 2020 Wu Bo <wubo009@163.com> - 0.3.111-6
+- rebuild package
+
 * Tue Mar 17 2020 hy-euler <eulerstoragemt@huawei.com> - 0.3.111-5
 - Type:enhancemnet
 - ID:NA
