@@ -31,8 +31,8 @@ Files for libaio development
 
 %prep
 %setup -q -a 0
-%patch0   -p0 -b .install-to-destdir-slash-usr
-%patch0   -p1 -b .install-to-destdir-slash-usr
+#%patch0   -p0 -b .install-to-destdir-slash-usr
+#%patch0   -p1 -b .install-to-destdir-slash-usr
 
 %patch1   -p0 -b .arm64-ilp32
 %patch1   -p1 -b .arm64-ilp32
@@ -40,10 +40,10 @@ Files for libaio development
 %patch2   -p0 -b .makefile-cflags
 %patch2   -p1 -b .makefile-cflags
 %endif
-%patch3   -p0 -b .makefile-destdir
-%patch3   -p1 -b .makefile-destdir
-%patch4   -p0 -b .fix-x32
-%patch4   -p1 -b .fix-x32
+#%patch3   -p0 -b .makefile-destdir
+#%patch3   -p1 -b .makefile-destdir
+%patch3   -p0 -b .fix-x32
+%patch3   -p1 -b .fix-x32
 
 mv %{name}-%{version} setup-%{name}-%{version}
 
