@@ -1,18 +1,17 @@
 Name:           libaio
-Version:        0.3.111
-Release:        6
+Version:        0.3.112
+Release:        1
 Summary:        Linux-native asynchronous I/O access library
 License:        LGPLv2+
 URL:            https://pagure.io/libaio
-Source:         http://releases.pagure.org/libaio/libaio-0.3.111.tar.gz
+Source:         https://releases.pagure.org/libaio/libaio-%{version}.tar.gz
 
 Patch0:         0000-libaio-install-to-destdir-slash-usr.patch
 Patch1:         0001-libaio-arm64-ilp32.patch
 %ifarch aarch64 aarch64_ilp32 x86_64
 Patch2:         0002-libaio-makefile-cflags.patch
 %endif
-Patch3:         0003-destdir.patch
-Patch4:         0004-libaio-fix-for-x32.patch
+Patch3:         0003-libaio-fix-for-x32.patch
 
 BuildRequires:  gcc
 
@@ -33,19 +32,12 @@ Files for libaio development
 
 %prep
 %setup -q -a 0
-%patch0   -p0 -b .install-to-destdir-slash-usr
 %patch0   -p1 -b .install-to-destdir-slash-usr
-
-%patch1   -p0 -b .arm64-ilp32
 %patch1   -p1 -b .arm64-ilp32
 %ifarch aarch64 aarch64_ilp32 x86_64
-%patch2   -p0 -b .makefile-cflags
 %patch2   -p1 -b .makefile-cflags
 %endif
-%patch3   -p0 -b .makefile-destdir
-%patch3   -p1 -b .makefile-destdir
-%patch4   -p0 -b .fix-x32
-%patch4   -p1 -b .fix-x32
+%patch3   -p1 -b .fix-x32
 
 mv %{name}-%{version} setup-%{name}-%{version}
 
@@ -74,6 +66,9 @@ rm -rf %{buildroot}%{_usr}/%{_lib}/libaio.a
 %attr(0755,root,root) %{_libdir}/libaio.so
 
 %changelog
+* Sat Jul 18 2020 volcanodragon <linfeilong@huawei.com> - 0.3.112-1
+- update from 0.3.111 to 0.3.112
+
 * Wed Jul 1 2020 Wu Bo <wubo009@163.com> - 0.3.111-6
 - rebuild package
 

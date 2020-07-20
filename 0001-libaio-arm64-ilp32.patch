@@ -1,6 +1,8 @@
---- libaio-0.3.111_old/src/libaio.h	2019-01-26 10:54:53.202000000 +0800
-+++ libaio-0.3.111/src/libaio.h	2019-01-26 12:51:37.150000000 +0800
-@@ -53,6 +53,7 @@
+diff --git a/src/libaio.h b/src/libaio.h
+index 2bc24e0..f44034d 100644
+--- a/src/libaio.h
++++ b/src/libaio.h
+@@ -54,6 +54,7 @@ typedef enum io_iocb_cmd {
  #if defined(__i386__) || (defined(__arm__) && !defined(__ARMEB__)) || \
      defined(__sh__) || defined(__bfin__) || defined(__MIPSEL__) || \
      defined(__cris__) || (defined(__riscv) && __riscv_xlen == 32) || \
@@ -8,7 +10,7 @@
      (defined(__GNUC__) && defined(__BYTE_ORDER__) && \
           __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__ && __SIZEOF_LONG__ == 4)
  #define PADDED(x, y)	x; unsigned y
-@@ -84,6 +85,7 @@
+@@ -85,6 +86,7 @@ typedef enum io_iocb_cmd {
        (defined(__arm__) && defined(__ARMEB__)) || \
        defined(__sparc__) || defined(__MIPSEB__) || defined(__m68k__) || \
        defined(__hppa__) || defined(__frv__) || defined(__avr32__) || \
