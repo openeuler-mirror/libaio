@@ -6,13 +6,11 @@ License:        LGPLv2+
 URL:            https://pagure.io/libaio
 Source:         https://releases.pagure.org/libaio/libaio-%{version}.tar.gz
 
-Patch0:         0000-libaio-install-to-destdir-slash-usr.patch
 Patch1:         0001-libaio-arm64-ilp32.patch
 %ifarch aarch64 aarch64_ilp32 x86_64
 Patch2:         0002-libaio-makefile-cflags.patch
 %endif
-Patch3:         0003-destdir.patch
-Patch4:         0004-libaio-fix-for-x32.patch
+Patch3:         0003-libaio-fix-for-x32.patch
 
 BuildRequires:  gcc
 
