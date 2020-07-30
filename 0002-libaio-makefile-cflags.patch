@@ -1,0 +1,13 @@
+diff --git a/src/Makefile b/src/Makefile
+index 37ae219..3325ec3 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -3,7 +3,7 @@ includedir=$(prefix)/include
+ libdir=$(prefix)/lib
+ 
+ CFLAGS ?= -g -fomit-frame-pointer -O2
+-CFLAGS += -Wall -I. -fPIC
++CFLAGS += $(RPM_OPT_FLAGS) -Wall -I. -fPIC
+ SO_CFLAGS=-shared $(CFLAGS)
+ L_CFLAGS=$(CFLAGS)
+ LINK_FLAGS=
