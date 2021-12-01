@@ -1,0 +1,29 @@
+From 02282eba33600bddaeaef844b07f0215580f1417 Mon Sep 17 00:00:00 2001
+From: Wu Bo <wubo40@huawei.com>
+Date: Wed, 1 Dec 2021 11:35:59 +0800
+Subject: [PATCH] libaio: makefile add D_FORTIFY_SOURCE flag
+
+add D_FORTIFY_SOURCE flag to Makefile for security
+
+Signed-off-by: Wu Bo <wubo40@huawei.com>
+Signed-off-by: volcanodragon <linfeilong@huawei.com>
+---
+ src/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Makefile b/src/Makefile
+index f0ee30d..805c936 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -2,7 +2,7 @@ prefix=/usr
+ includedir=$(prefix)/include
+ libdir=$(prefix)/lib
+ 
+-CFLAGS ?= -g -fomit-frame-pointer -O2
++CFLAGS ?= -g -fomit-frame-pointer -D_FORTIFY_SOURCE=2 -O2
+ CFLAGS += $(RPM_OPT_FLAGS) -Wall -I. -fPIC
+ SO_CFLAGS=-shared $(CFLAGS)
+ L_CFLAGS=$(CFLAGS)
+-- 
+1.8.3.1
+
