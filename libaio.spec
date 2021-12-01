@@ -1,6 +1,8 @@
+#needsrootforbuild
+
 Name:           libaio
 Version:        0.3.112
-Release:        1
+Release:        2
 Summary:        Linux-native asynchronous I/O access library
 License:        LGPLv2+
 URL:            https://pagure.io/libaio
@@ -57,6 +59,9 @@ rm -rf %{buildroot}%{_usr}/%{_lib}/libaio.a
 
 %ldconfig_scriptlets
 
+%check
+make check
+
 %files
 %license COPYING
 %attr(0755,root,root) %{_libdir}/libaio.so.*
@@ -66,6 +71,9 @@ rm -rf %{buildroot}%{_usr}/%{_lib}/libaio.a
 %attr(0755,root,root) %{_libdir}/libaio.so
 
 %changelog
+* Wed Dec 1 2021 Li Jinlin  <lijinlin3@huawei.com> - 0.3.112-2
+- enable %check option
+
 * Sat Jul 18 2020 volcanodragon <linfeilong@huawei.com> - 0.3.112-1
 - update from 0.3.111 to 0.3.112
 
