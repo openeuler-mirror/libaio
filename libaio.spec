@@ -74,7 +74,7 @@ make check
 * Wed Dec 1 2021 Li Jinlin  <lijinlin3@huawei.com> - 0.3.112-2
 - enable %check option
 
-* Sat Jul 29 2020 Zhiqiang Liu <liuzhiqiang26@huawei.com> - 0.3.112-1
+* Wed Jul 29 2020 Zhiqiang Liu <liuzhiqiang26@huawei.com> - 0.3.112-1
 - update from 0.3.111 to 0.3.112
 
 * Tue Mar 17 2020 hy-euler <eulerstoragemt@huawei.com> - 0.3.111-5
