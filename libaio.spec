@@ -2,7 +2,7 @@
 
 Name:           libaio
 Version:        0.3.112
-Release:        3
+Release:        4
 Summary:        Linux-native asynchronous I/O access library
 License:        LGPLv2+
 URL:            https://pagure.io/libaio
@@ -41,6 +41,8 @@ Files for libaio development
 %patch2   -p1 -b .makefile-cflags
 %endif
 %patch3   -p1 -b .fix-x32
+%patch4   -p1 -b .makefile-add-D_FORTIFY_SOURCE-flag
+
 
 mv %{name}-%{version} setup-%{name}-%{version}
 
@@ -72,6 +74,9 @@ make check
 %attr(0755,root,root) %{_libdir}/libaio.so
 
 %changelog
+* Thu May 12 2022 Li Jinlin  <lijinlin3@huawei.com> - 0.3.112-4
+- fix patch4 not apply
+
 * Wed Dec 1 2021 volcanodragon <linfeilong@huawei.com> - 0.3.112-3
 - add D_FORTIFY_SOURCE flag to Makefile for security
 
