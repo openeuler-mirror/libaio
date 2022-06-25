@@ -1,8 +1,7 @@
-#needsrootforbuild
 
 Name:           libaio
 Version:        0.3.112
-Release:        4
+Release:        5
 Summary:        Linux-native asynchronous I/O access library
 License:        LGPLv2+
 URL:            https://pagure.io/libaio
@@ -15,6 +14,7 @@ Patch2:         0002-libaio-makefile-cflags.patch
 %endif
 Patch3:         0003-libaio-fix-for-x32.patch
 Patch4:         0004-libaio-makefile-add-D_FORTIFY_SOURCE-flag.patch
+Patch5:         0005-Fix-compile-error-that-exec-checking-need-super-priv.patch
 
 BuildRequires:  gcc
 
@@ -42,7 +42,7 @@ Files for libaio development
 %endif
 %patch3   -p1 -b .fix-x32
 %patch4   -p1 -b .makefile-add-D_FORTIFY_SOURCE-flag
-
+%patch5   -p1 -b .fix-compile-error
 
 mv %{name}-%{version} setup-%{name}-%{version}
 
@@ -74,6 +74,9 @@ make check
 %attr(0755,root,root) %{_libdir}/libaio.so
 
 %changelog
+* Fri Jun 24 2022 lihaoxiang <lihaoxiang9@huawei.com> - 0.3.112-5
+- fix compile error 
+
 * Thu May 12 2022 Li Jinlin  <lijinlin3@huawei.com> - 0.3.112-4
 - fix patch4 not apply
 
