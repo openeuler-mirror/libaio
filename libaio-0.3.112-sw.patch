@@ -1,0 +1,126 @@
+diff -Nuar libaio-0.3.112.org/harness/cases/16.t libaio-0.3.112.sw/harness/cases/16.t
+--- libaio-0.3.112.org/harness/cases/16.t	2022-07-29 16:39:35.580000000 +0000
++++ libaio-0.3.112.sw/harness/cases/16.t	2022-07-29 16:44:54.450000000 +0000
+@@ -16,6 +16,8 @@
+ #define SYS_eventfd 307
+ #elif defined(__s390__)
+ #define SYS_eventfd 318
++#elif defined(__sw_64__)
++#define SYS_eventfd 478
+ #elif defined(__alpha__)
+ #define SYS_eventfd 478
+ #elif defined(__aarch64__)
+diff -Nuar libaio-0.3.112.org/libaio-0.3.112/harness/cases/16.t libaio-0.3.112.sw/libaio-0.3.112/harness/cases/16.t
+--- libaio-0.3.112.org/libaio-0.3.112/harness/cases/16.t	2022-07-29 16:39:35.590000000 +0000
++++ libaio-0.3.112.sw/libaio-0.3.112/harness/cases/16.t	2022-07-29 16:46:40.590000000 +0000
+@@ -16,6 +16,8 @@
+ #define SYS_eventfd 307
+ #elif defined(__s390__)
+ #define SYS_eventfd 318
++#elif defined(__sw_64__)
++#define SYS_eventfd 478
+ #elif defined(__alpha__)
+ #define SYS_eventfd 478
+ #elif defined(__aarch64__)
+diff -Nuar libaio-0.3.112.org/libaio-0.3.112/libaio.spec libaio-0.3.112.sw/libaio-0.3.112/libaio.spec
+--- libaio-0.3.112.org/libaio-0.3.112/libaio.spec	2022-07-29 16:39:35.590000000 +0000
++++ libaio-0.3.112.sw/libaio-0.3.112/libaio.spec	2022-07-29 16:47:04.810000000 +0000
+@@ -7,7 +7,7 @@
+ Source: %{name}-%{version}.tar.gz
+ BuildRoot: %{_tmppath}/%{name}-root
+ # Fix ExclusiveArch as we implement this functionality on more architectures
+-ExclusiveArch: i386 x86_64 ia64 s390 s390x ppc ppc64 ppc64pseries ppc64iseries alpha alphaev6 %{arm}
++ExclusiveArch: i386 x86_64 ia64 s390 s390x ppc ppc64 ppc64pseries ppc64iseries alpha sw_64 alphaev6 %{arm}
+ 
+ %description
+ The Linux-native asynchronous I/O facility ("async I/O", or "aio") has a
+diff -Nuar libaio-0.3.112.org/libaio-0.3.112/src/libaio.h libaio-0.3.112.sw/libaio-0.3.112/src/libaio.h
+--- libaio-0.3.112.org/libaio-0.3.112/src/libaio.h	2022-07-29 16:39:35.600000000 +0000
++++ libaio-0.3.112.sw/libaio-0.3.112/src/libaio.h	2022-07-29 16:51:34.550000000 +0000
+@@ -61,7 +61,7 @@
+ #define PADDEDul(x, y)	unsigned long x; unsigned y
+ 
+ /* little endian, 64 bits */
+-#elif defined(__ia64__) || defined(__x86_64__) || defined(__alpha__) || \
++#elif defined(__ia64__) || defined(__x86_64__) || defined(__alpha__) || defined(__sw_64__) || \
+       (defined(__aarch64__) && defined(__AARCH64EL__)) || \
+       (defined(__riscv) && __riscv_xlen == 64) || \
+       (defined(__GNUC__) && defined(__BYTE_ORDER__) && \
+diff -Nuar libaio-0.3.112.org/libaio-0.3.112/src/syscall-sw_64.h libaio-0.3.112.sw/libaio-0.3.112/src/syscall-sw_64.h
+--- libaio-0.3.112.org/libaio-0.3.112/src/syscall-sw_64.h	1970-01-01 00:00:00.000000000 +0000
++++ libaio-0.3.112.sw/libaio-0.3.112/src/syscall-sw_64.h	2022-07-29 16:55:06.690000000 +0000
+@@ -0,0 +1,5 @@
++#define __NR_io_setup		398
++#define __NR_io_destroy		399
++#define __NR_io_getevents	400
++#define __NR_io_submit		401
++#define __NR_io_cancel		402
+diff -Nuar libaio-0.3.112.org/libaio-0.3.112/src/syscall.h libaio-0.3.112.sw/libaio-0.3.112/src/syscall.h
+--- libaio-0.3.112.org/libaio-0.3.112/src/syscall.h	2022-07-29 16:39:35.600000000 +0000
++++ libaio-0.3.112.sw/libaio-0.3.112/src/syscall.h	2022-07-29 16:55:31.370000000 +0000
+@@ -21,6 +21,8 @@
+ #include "syscall-ppc.h"
+ #elif defined(__s390__)
+ #include "syscall-s390.h"
++#elif defined(__sw_64__)
++#include "syscall-sw_64.h"
+ #elif defined(__alpha__)
+ #include "syscall-alpha.h"
+ #elif defined(__arm__)
+diff -Nuar libaio-0.3.112.org/libaio.spec libaio-0.3.112.sw/libaio.spec
+--- libaio-0.3.112.org/libaio.spec	2022-07-29 16:39:35.580000000 +0000
++++ libaio-0.3.112.sw/libaio.spec	2022-07-29 16:45:23.150000000 +0000
+@@ -7,7 +7,7 @@
+ Source: %{name}-%{version}.tar.gz
+ BuildRoot: %{_tmppath}/%{name}-root
+ # Fix ExclusiveArch as we implement this functionality on more architectures
+-ExclusiveArch: i386 x86_64 ia64 s390 s390x ppc ppc64 ppc64pseries ppc64iseries alpha alphaev6 %{arm}
++ExclusiveArch: i386 x86_64 ia64 s390 s390x ppc ppc64 ppc64pseries ppc64iseries alpha sw_64 alphaev6 %{arm}
+ 
+ %description
+ The Linux-native asynchronous I/O facility ("async I/O", or "aio") has a
+diff -Nuar libaio-0.3.112.org/src/libaio.h libaio-0.3.112.sw/src/libaio.h
+--- libaio-0.3.112.org/src/libaio.h	2022-07-29 16:39:35.590000000 +0000
++++ libaio-0.3.112.sw/src/libaio.h	2022-07-29 16:48:09.440000000 +0000
+@@ -62,7 +62,7 @@
+ #define PADDEDul(x, y)	unsigned long x; unsigned y
+ 
+ /* little endian, 64 bits */
+-#elif defined(__ia64__) || defined(__x86_64__) || defined(__alpha__) || \
++#elif defined(__ia64__) || defined(__x86_64__) || defined(__alpha__) || defined(__sw_64__) || \
+       (defined(__aarch64__) && defined(__AARCH64EL__)) || \
+       (defined(__riscv) && __riscv_xlen == 64) || \
+       (defined(__GNUC__) && defined(__BYTE_ORDER__) && \
+diff -Nuar libaio-0.3.112.org/src/libaio.h.arm64-ilp32 libaio-0.3.112.sw/src/libaio.h.arm64-ilp32
+--- libaio-0.3.112.org/src/libaio.h.arm64-ilp32	2022-07-29 16:39:35.590000000 +0000
++++ libaio-0.3.112.sw/src/libaio.h.arm64-ilp32	2022-07-29 16:52:58.860000000 +0000
+@@ -61,7 +61,7 @@
+ #define PADDEDul(x, y)	unsigned long x; unsigned y
+ 
+ /* little endian, 64 bits */
+-#elif defined(__ia64__) || defined(__x86_64__) || defined(__alpha__) || \
++#elif defined(__ia64__) || defined(__x86_64__) || defined(__alpha__) || defined(__sw_64__) || \
+       (defined(__aarch64__) && defined(__AARCH64EL__)) || \
+       (defined(__riscv) && __riscv_xlen == 64) || \
+       (defined(__GNUC__) && defined(__BYTE_ORDER__) && \
+diff -Nuar libaio-0.3.112.org/src/syscall-sw_64.h libaio-0.3.112.sw/src/syscall-sw_64.h
+--- libaio-0.3.112.org/src/syscall-sw_64.h	1970-01-01 00:00:00.000000000 +0000
++++ libaio-0.3.112.sw/src/syscall-sw_64.h	2022-07-29 16:54:00.610000000 +0000
+@@ -0,0 +1,5 @@
++#define __NR_io_setup		398
++#define __NR_io_destroy		399
++#define __NR_io_getevents	400
++#define __NR_io_submit		401
++#define __NR_io_cancel		402
+diff -Nuar libaio-0.3.112.org/src/syscall.h libaio-0.3.112.sw/src/syscall.h
+--- libaio-0.3.112.org/src/syscall.h	2022-07-29 16:39:35.590000000 +0000
++++ libaio-0.3.112.sw/src/syscall.h	2022-07-29 16:54:32.940000000 +0000
+@@ -21,6 +21,8 @@
+ #include "syscall-ppc.h"
+ #elif defined(__s390__)
+ #include "syscall-s390.h"
++#elif defined(__sw_64__)
++#include "syscall-sw_64.h"
+ #elif defined(__alpha__)
+ #include "syscall-alpha.h"
+ #elif defined(__arm__)
