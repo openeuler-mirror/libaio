@@ -1,7 +1,7 @@
 
 Name:           libaio
-Version:        0.3.112
-Release:        5
+Version:        0.3.113
+Release:        1
 Summary:        Linux-native asynchronous I/O access library
 License:        LGPLv2+
 URL:            https://pagure.io/libaio
@@ -74,6 +74,9 @@ make check
 %attr(0755,root,root) %{_libdir}/libaio.so
 
 %changelog
+* Fri Oct 28 2022 wangzhiqiang <wangzhiqiang95@huawei.com> - 0.3.113-1
+- update from 0.3.112 to 0.3.113
+
 * Fri Jun 24 2022 lihaoxiang <lihaoxiang9@huawei.com> - 0.3.112-5
 - fix compile error 
 
