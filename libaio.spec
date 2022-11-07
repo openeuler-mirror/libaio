@@ -16,7 +16,6 @@ Patch3:         0003-libaio-fix-for-x32.patch
 Patch4:         0004-libaio-makefile-add-D_FORTIFY_SOURCE-flag.patch
 Patch5:         0005-Fix-compile-error-that-exec-checking-need-super-priv.patch
 Patch6:         0006-skip-testcase-23-since-current-kernel-version-not-su.patch
-Patch7:         0007-libaio-Add-sw64-architecture.patch
 
 BuildRequires:  gcc
 
@@ -46,7 +45,6 @@ Files for libaio development
 %patch4   -p1 -b .makefile-add-D_FORTIFY_SOURCE-flag
 %patch5   -p1 -b .fix-compile-error
 %patch6   -p1 -b .skip-testcase
-%patch7   -p1
 
 mv %{name}-%{version} setup-%{name}-%{version}
 
@@ -78,9 +76,6 @@ make check
 %attr(0755,root,root) %{_libdir}/libaio.so
 
 %changelog
-* Wed Nov 7 2022 wuzx<wuzx1226@qq.com> - 0.3.113-3
-- Add sw64 architecture
-
 * Thu Nov 3 2022 wangzhiqiang <wangzhiqiang95@huawei.com> - 0.3.113-2
 - skip testcase 23 since current kernel version not support
 
