@@ -1,0 +1,138 @@
+From 9f996eb3419e32f7408b14d49421ef9058ff17cf Mon Sep 17 00:00:00 2001
+From: wzx <wuzx1226@qq.com>
+Date: Mon, 7 Nov 2022 15:13:35 +0800
+Subject: [PATCH] Add sw64 architecture
+
+Add sw64 architecture in file harness/cases/16.t setup-libaio-0.3.113/harness/cases/16.t setup-libaio-0.3.113/src/libaio.h setup-libaio-0.3.113/src/syscall-sw_64.h setup-libaio-0.3.113/src/syscall.h src/libaio.h src/libaio.h.arm64-ilp32 src/syscall-sw_64.h src/syscall.h to support sw64 architecture.
+
+Signed-off-by: wzx <wuzx1226@qq.com>
+---
+ harness/cases/16.t                       | 2 ++
+ setup-libaio-0.3.113/harness/cases/16.t  | 2 ++
+ setup-libaio-0.3.113/src/libaio.h        | 2 +-
+ setup-libaio-0.3.113/src/syscall-sw_64.h | 5 +++++
+ setup-libaio-0.3.113/src/syscall.h       | 2 ++
+ src/libaio.h                             | 2 +-
+ src/libaio.h.arm64-ilp32                 | 2 +-
+ src/syscall-sw_64.h                      | 5 +++++
+ src/syscall.h                            | 2 ++
+ 9 files changed, 21 insertions(+), 3 deletions(-)
+ create mode 100644 setup-libaio-0.3.113/src/syscall-sw_64.h
+ create mode 100644 src/syscall-sw_64.h
+
+diff --git a/harness/cases/16.t b/harness/cases/16.t
+index 4d24b04..9e8684a 100644
+--- a/harness/cases/16.t
++++ b/harness/cases/16.t
+@@ -16,6 +16,8 @@
+ #define SYS_eventfd 307
+ #elif defined(__s390__)
+ #define SYS_eventfd 318
++#elif defined(__sw_64__)
++#define SYS_eventfd 478
+ #elif defined(__alpha__)
+ #define SYS_eventfd 478
+ #elif defined(__aarch64__) || defined(__loongarch__) || defined(__riscv)
+diff --git a/setup-libaio-0.3.113/harness/cases/16.t b/setup-libaio-0.3.113/harness/cases/16.t
+index 4d24b04..9e8684a 100644
+--- a/setup-libaio-0.3.113/harness/cases/16.t
++++ b/setup-libaio-0.3.113/harness/cases/16.t
+@@ -16,6 +16,8 @@
+ #define SYS_eventfd 307
+ #elif defined(__s390__)
+ #define SYS_eventfd 318
++#elif defined(__sw_64__)
++#define SYS_eventfd 478
+ #elif defined(__alpha__)
+ #define SYS_eventfd 478
+ #elif defined(__aarch64__) || defined(__loongarch__) || defined(__riscv)
+diff --git a/setup-libaio-0.3.113/src/libaio.h b/setup-libaio-0.3.113/src/libaio.h
+index 24b4b8a..24a1a28 100644
+--- a/setup-libaio-0.3.113/src/libaio.h
++++ b/setup-libaio-0.3.113/src/libaio.h
+@@ -62,7 +62,7 @@ typedef enum io_iocb_cmd {
+ #define PADDEDul(x, y)	unsigned long x; unsigned y
+ 
+ /* little endian, 64 bits */
+-#elif defined(__ia64__) || defined(__x86_64__) || defined(__alpha__) || \
++#elif defined(__ia64__) || defined(__x86_64__) || defined(__alpha__) || defined(__sw_64__) || \
+       (defined(__aarch64__) && defined(__AARCH64EL__)) || \
+       defined(__loongarch64) || \
+       (defined(__riscv) && __riscv_xlen == 64) || \
+diff --git a/setup-libaio-0.3.113/src/syscall-sw_64.h b/setup-libaio-0.3.113/src/syscall-sw_64.h
+new file mode 100644
+index 0000000..0aa4d3d
+--- /dev/null
++++ b/setup-libaio-0.3.113/src/syscall-sw_64.h
+@@ -0,0 +1,5 @@
++#define __NR_io_setup		398
++#define __NR_io_destroy		399
++#define __NR_io_getevents	400
++#define __NR_io_submit		401
++#define __NR_io_cancel		402
+diff --git a/setup-libaio-0.3.113/src/syscall.h b/setup-libaio-0.3.113/src/syscall.h
+index d2a117b..abc1762 100644
+--- a/setup-libaio-0.3.113/src/syscall.h
++++ b/setup-libaio-0.3.113/src/syscall.h
+@@ -21,6 +21,8 @@
+ #include "syscall-ppc.h"
+ #elif defined(__s390__)
+ #include "syscall-s390.h"
++#elif defined(__sw_64__)
++#include "syscall-sw_64.h"
+ #elif defined(__alpha__)
+ #include "syscall-alpha.h"
+ #elif defined(__arm__)
+diff --git a/src/libaio.h b/src/libaio.h
+index 87f9e8a..d9e4fb8 100644
+--- a/src/libaio.h
++++ b/src/libaio.h
+@@ -63,7 +63,7 @@ typedef enum io_iocb_cmd {
+ #define PADDEDul(x, y)	unsigned long x; unsigned y
+ 
+ /* little endian, 64 bits */
+-#elif defined(__ia64__) || defined(__x86_64__) || defined(__alpha__) || \
++#elif defined(__ia64__) || defined(__x86_64__) || defined(__alpha__) || defined(__sw_64__) || \
+       (defined(__aarch64__) && defined(__AARCH64EL__)) || \
+       defined(__loongarch64) || \
+       (defined(__riscv) && __riscv_xlen == 64) || \
+diff --git a/src/libaio.h.arm64-ilp32 b/src/libaio.h.arm64-ilp32
+index 24b4b8a..24a1a28 100644
+--- a/src/libaio.h.arm64-ilp32
++++ b/src/libaio.h.arm64-ilp32
+@@ -62,7 +62,7 @@ typedef enum io_iocb_cmd {
+ #define PADDEDul(x, y)	unsigned long x; unsigned y
+ 
+ /* little endian, 64 bits */
+-#elif defined(__ia64__) || defined(__x86_64__) || defined(__alpha__) || \
++#elif defined(__ia64__) || defined(__x86_64__) || defined(__alpha__) || defined(__sw_64__) || \
+       (defined(__aarch64__) && defined(__AARCH64EL__)) || \
+       defined(__loongarch64) || \
+       (defined(__riscv) && __riscv_xlen == 64) || \
+diff --git a/src/syscall-sw_64.h b/src/syscall-sw_64.h
+new file mode 100644
+index 0000000..0aa4d3d
+--- /dev/null
++++ b/src/syscall-sw_64.h
+@@ -0,0 +1,5 @@
++#define __NR_io_setup		398
++#define __NR_io_destroy		399
++#define __NR_io_getevents	400
++#define __NR_io_submit		401
++#define __NR_io_cancel		402
+diff --git a/src/syscall.h b/src/syscall.h
+index d2a117b..abc1762 100644
+--- a/src/syscall.h
++++ b/src/syscall.h
+@@ -21,6 +21,8 @@
+ #include "syscall-ppc.h"
+ #elif defined(__s390__)
+ #include "syscall-s390.h"
++#elif defined(__sw_64__)
++#include "syscall-sw_64.h"
+ #elif defined(__alpha__)
+ #include "syscall-alpha.h"
+ #elif defined(__arm__)
+-- 
+2.33.0
+
