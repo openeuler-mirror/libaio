@@ -1,7 +1,7 @@
 
 Name:           libaio
 Version:        0.3.113
-Release:        3
+Release:        4
 Summary:        Linux-native asynchronous I/O access library
 License:        LGPLv2+
 URL:            https://pagure.io/libaio
@@ -38,16 +38,24 @@ Files for libaio development
 %prep
 %setup -q -a 0
 %patch0   -p1 -b .install-to-destdir-slash-usr
+%patch0   -p1 -b .install-to-destdir-slash-usr -d %{name}-%{version}
 %patch1   -p1 -b .arm64-ilp32
+%patch1   -p1 -b .arm64-ilp32 -d %{name}-%{version}
 %ifarch aarch64 aarch64_ilp32 x86_64
 %patch2   -p1 -b .makefile-cflags
+%patch2   -p1 -b .makefile-cflags -d %{name}-%{version}
 %endif
 %patch3   -p1 -b .fix-x32
+%patch3   -p1 -b .fix-x32 -d %{name}-%{version}
 %patch4   -p1 -b .makefile-add-D_FORTIFY_SOURCE-flag
+%patch4   -p1 -b .makefile-add-D_FORTIFY_SOURCE-flag -d %{name}-%{version}
 %patch5   -p1 -b .fix-compile-error
+%patch5   -p1 -b .fix-compile-error -d %{name}-%{version}
 %patch6   -p1 -b .skip-testcase
+%patch6   -p1 -b .skip-testcase -d %{name}-%{version}
 %ifarch sw_64
 %patch7   -p1
+%patch7   -p1 -d %{name}-%{version}
 %endif
 
 mv %{name}-%{version} setup-%{name}-%{version}
@@ -80,6 +88,9 @@ make check
 %attr(0755,root,root) %{_libdir}/libaio.so
 
 %changelog
+* Fri Dec 2 2022 liubo<liubo254@huawei.com> - 0.3.113-4
+- Sync patches to setup-libaio-%{version}-%{version} package
+
 * Mon Nov 7 2022 wuzx<wuzx1226@qq.com> - 0.3.113-3
 - Add sw64 architecture
 
