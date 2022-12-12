@@ -1,7 +1,7 @@
 
 Name:           libaio
 Version:        0.3.113
-Release:        4
+Release:        5
 Summary:        Linux-native asynchronous I/O access library
 License:        LGPLv2+
 URL:            https://pagure.io/libaio
@@ -36,39 +36,24 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Files for libaio development
 
 %prep
-%setup -q -a 0
+%setup
 %patch0   -p1 -b .install-to-destdir-slash-usr
-%patch0   -p1 -b .install-to-destdir-slash-usr -d %{name}-%{version}
 %patch1   -p1 -b .arm64-ilp32
-%patch1   -p1 -b .arm64-ilp32 -d %{name}-%{version}
 %ifarch aarch64 aarch64_ilp32 x86_64
 %patch2   -p1 -b .makefile-cflags
-%patch2   -p1 -b .makefile-cflags -d %{name}-%{version}
 %endif
 %patch3   -p1 -b .fix-x32
-%patch3   -p1 -b .fix-x32 -d %{name}-%{version}
 %patch4   -p1 -b .makefile-add-D_FORTIFY_SOURCE-flag
-%patch4   -p1 -b .makefile-add-D_FORTIFY_SOURCE-flag -d %{name}-%{version}
 %patch5   -p1 -b .fix-compile-error
-%patch5   -p1 -b .fix-compile-error -d %{name}-%{version}
 %patch6   -p1 -b .skip-testcase
-%patch6   -p1 -b .skip-testcase -d %{name}-%{version}
 %ifarch sw_64
 %patch7   -p1
-%patch7   -p1 -d %{name}-%{version}
 %endif
 
-mv %{name}-%{version} setup-%{name}-%{version}
-
 %build
-make -C setup-%{name}-%{version} soname='libaio.so.1.0.0' libname='libaio.so.1.0.0'
 make
 
 %install
-pushd setup-%{name}-%{version}
-install -D -m 755 src/libaio.so.1.0.0 \
-  $RPM_BUILD_ROOT/%{_libdir}/libaio.so.1.0.0
-popd
 make destdir=$RPM_BUILD_ROOT prefix=/ libdir=/%{_lib} usrlibdir=%{_libdir} \
         includedir=%{_includedir} install
 
@@ -88,6 +73,9 @@ make check
 %attr(0755,root,root) %{_libdir}/libaio.so
 
 %changelog
+* Thu Dec 8 2022 Chenxi Mao<chenxi.mao@suse.com> - 0.3.113-5
+- Remove useless shared library
+
 * Fri Dec 2 2022 liubo<liubo254@huawei.com> - 0.3.113-4
 - Sync patches to setup-libaio-%{version}-%{version} package
 
