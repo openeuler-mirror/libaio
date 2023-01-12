@@ -1,0 +1,63 @@
+From 8141794b406d0f7aee331dbacda51385ab65dcd3 Mon Sep 17 00:00:00 2001
+From: Jingyun Hua <huajingyun@loongson.cn>
+Date: Tue, 10 Jan 2023 10:22:03 +0800
+Subject: [PATCH] add loongarch support
+
+Signed-off-by: Jingyun Hua <huajingyun@loongson.cn>
+---
+ harness/cases/16.t | 2 +-
+ src/libaio.h       | 4 +++-
+ src/syscall.h      | 2 +-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/harness/cases/16.t b/harness/cases/16.t
+index 5a546ff..eb96e14 100644
+--- a/harness/cases/16.t
++++ b/harness/cases/16.t
+@@ -18,7 +18,7 @@
+ #define SYS_eventfd 318
+ #elif defined(__alpha__)
+ #define SYS_eventfd 478
+-#elif defined(__aarch64__)
++#elif defined(__aarch64__) || defined(__loongarch__)
+ /* arm64 does not implement eventfd, only eventfd2 */
+ #define USE_EVENTFD2
+ #ifndef SYS_eventfd2
+diff --git a/src/libaio.h b/src/libaio.h
+index f44034d..b6c073f 100644
+--- a/src/libaio.h
++++ b/src/libaio.h
+@@ -53,7 +53,8 @@ typedef enum io_iocb_cmd {
+ /* little endian, 32 bits */
+ #if defined(__i386__) || (defined(__arm__) && !defined(__ARMEB__)) || \
+     defined(__sh__) || defined(__bfin__) || defined(__MIPSEL__) || \
+-    defined(__cris__) || (defined(__riscv) && __riscv_xlen == 32) || \
++    defined(__cris__) || defined(__loongarch32) || \
++    (defined(__riscv) && __riscv_xlen == 32) || \
+     (defined(__aarch64__) && defined(__ILP32__) && defined(__AARCH64EL__)) || \
+     (defined(__GNUC__) && defined(__BYTE_ORDER__) && \
+          __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__ && __SIZEOF_LONG__ == 4)
+@@ -64,6 +65,7 @@ typedef enum io_iocb_cmd {
+ /* little endian, 64 bits */
+ #elif defined(__ia64__) || defined(__x86_64__) || defined(__alpha__) || \
+       (defined(__aarch64__) && defined(__AARCH64EL__)) || \
++      defined(__loongarch64) || \
+       (defined(__riscv) && __riscv_xlen == 64) || \
+       (defined(__GNUC__) && defined(__BYTE_ORDER__) && \
+           __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__ && __SIZEOF_LONG__ == 8)
+diff --git a/src/syscall.h b/src/syscall.h
+index b53da4c..d2a117b 100644
+--- a/src/syscall.h
++++ b/src/syscall.h
+@@ -27,7 +27,7 @@
+ #include "syscall-arm.h"
+ #elif defined(__sparc__)
+ #include "syscall-sparc.h"
+-#elif defined(__aarch64__) || defined(__riscv)
++#elif defined(__aarch64__) || defined(__loongarch__) || defined(__riscv)
+ #include "syscall-generic.h"
+ #else
+ #warning "using system call numbers from sys/syscall.h"
+-- 
+2.33.0
+
