@@ -1,7 +1,7 @@
 
 Name:           libaio
 Version:        0.3.113
-Release:        6
+Release:        7
 Summary:        Linux-native asynchronous I/O access library
 License:        LGPLv2+
 URL:            https://pagure.io/libaio
@@ -9,9 +9,7 @@ Source:         https://releases.pagure.org/libaio/libaio-%{version}.tar.gz
 
 Patch0:         0000-libaio-install-to-destdir-slash-usr.patch
 Patch1:         0001-libaio-arm64-ilp32.patch
-%ifarch aarch64 aarch64_ilp32 x86_64
 Patch2:         0002-libaio-makefile-cflags.patch
-%endif
 Patch3:         0003-libaio-fix-for-x32.patch
 Patch4:         0004-libaio-makefile-add-D_FORTIFY_SOURCE-flag.patch
 Patch5:         0005-Fix-compile-error-that-exec-checking-need-super-priv.patch
@@ -38,9 +36,7 @@ Files for libaio development
 %setup
 %patch0   -p1 -b .install-to-destdir-slash-usr
 %patch1   -p1 -b .arm64-ilp32
-%ifarch aarch64 aarch64_ilp32 x86_64
 %patch2   -p1 -b .makefile-cflags
-%endif
 %patch3   -p1 -b .fix-x32
 %patch4   -p1 -b .makefile-add-D_FORTIFY_SOURCE-flag
 %patch5   -p1 -b .fix-compile-error
@@ -71,6 +67,9 @@ make check
 %attr(0755,root,root) %{_libdir}/libaio.so
 
 %changelog
+* Fri Mar 17 2023 laokz <zhangkai@iscas.ac.cn> - 0.3.113-7
+- remove patch2 arch-protection macro
+
 * Wed Jan 11 2023 lihaoxiang <lihaoxiang9@huawei.com> - 0.3.113-6
 - remove patch 'skip testcase 23'
 
