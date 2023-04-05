@@ -1,7 +1,7 @@
 
 Name:           libaio
 Version:        0.3.113
-Release:        7
+Release:        8
 Summary:        Linux-native asynchronous I/O access library
 License:        LGPLv2+
 URL:            https://pagure.io/libaio
@@ -14,6 +14,7 @@ Patch3:         0003-libaio-fix-for-x32.patch
 Patch4:         0004-libaio-makefile-add-D_FORTIFY_SOURCE-flag.patch
 Patch5:         0005-Fix-compile-error-that-exec-checking-need-super-priv.patch
 Patch6:		0006-libaio-Add-sw64-architecture.patch
+Patch7:         0007-Fix-build-error-if-compiler-is-clang.patch
 
 BuildRequires:  gcc
 
@@ -43,6 +44,7 @@ Files for libaio development
 %ifarch sw_64
 %patch6   -p1
 %endif
+%patch7   -p1
 
 %build
 make
@@ -67,6 +69,9 @@ make check
 %attr(0755,root,root) %{_libdir}/libaio.so
 
 %changelog
+* Wed Apr 05 2023 Chenxi Mao <chenxi.mao@suse.com> - 0.3.113-8
+- Fix build error if compiler is clang.
+
 * Fri Mar 17 2023 laokz <zhangkai@iscas.ac.cn> - 0.3.113-7
 - remove patch2 arch-protection macro
 

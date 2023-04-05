@@ -1,0 +1,56 @@
+From 8c4d190b7a5ff484d4393d1d445a4245bda74c92 Mon Sep 17 00:00:00 2001
+From: Chenxi Mao <chenxi.mao@suse.com>
+Date: Wed, 5 Apr 2023 19:39:22 +0800
+Subject: [PATCH 1/1] Fix build error if compiler is clang
+
+There is a build error if compiler is clang:
+clang -O2  -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS --config /usr/lib/rpm/generic-hardened-clang.cfg -fstack-protector-strong -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection  -Wall -Werror -I../src -g -O2 -Wno-stringop-overflow -DTEST_NAME=\"cases/3.t\" -o cases/3.p main.c ../src/libaio.a -lpthread
+error: unknown warning option '-Wno-stringop-overflow'; did you mean '-Wno-shift-overflow'? [-Werror,-Wunknown-warning-option]
+
+./cases/13.t:38:26: error: use of GNU old-style field designator extension [-Werror,-Wgnu-designator]
+                 struct timespec ts = { tv_sec: 30, tv_nsec: 0 };
+                                        ^~~~~~~
+                                        .tv_sec =
+./cases/13.t:38:38: error: use of GNU old-style field designator extension [-Werror,-Wgnu-designator]
+                 struct timespec ts = { tv_sec: 30, tv_nsec: 0 };
+                                                   ^~~~~~~~
+                                                   .tv_nsec =
+Signed-off-by: Chenxi Mao <chenxi.mao@suse.com>
+---
+ harness/Makefile   | 2 ++
+ harness/cases/13.t | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/harness/Makefile b/harness/Makefile
+index d7243a6..8d067eb 100644
+--- a/harness/Makefile
++++ b/harness/Makefile
+@@ -10,10 +10,12 @@ HARNESS_SRCS:=main.c
+ CFLAGS+=-Wall -Werror -I../src -g -O2
+ #-lpthread -lrt
+ 
++ifeq ($(CC),gcc)
+ # gcc-11 does not like the test case in 3.t that
+ # passes an invalid pointer (-1) to the kernel, so
+ # tell the compiler we do not need a warning here
+ cases/3.p:	CFLAGS+=-Wno-stringop-overflow
++endif
+ 
+ # Change this on the build line to run tests against the installed libraries:
+ # make LIBAIO=-laio partcheck
+diff --git a/harness/cases/13.t b/harness/cases/13.t
+index 5f18005..9e82380 100644
+--- a/harness/cases/13.t
++++ b/harness/cases/13.t
+@@ -35,7 +35,7 @@ int test_main(void)
+ 	status |= attempt_io_submit(io_ctx, IOS, iocb_list, IOS);
+ 
+ 	for (i=0; i<IOS; i++) {
+-		struct timespec ts = { tv_sec: 30, tv_nsec: 0 };
++		struct timespec ts = { .tv_sec = 30, .tv_nsec = 0 };
+ 		struct io_event event;
+ 		struct iocb *iocb;
+ 
+-- 
+2.33.0
+
